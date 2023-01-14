@@ -1,0 +1,29 @@
+#include <BluetoothSerial.h>
+int loops;
+BluetoothSerial BTSerial; 
+boolean running = false;
+
+// the setup routine runs on start and once when you press reset:
+void setup() {
+  // initialize serial communication at 9600 bits per second:
+  Serial.begin(9600);
+  BTSerial.begin("NewJingEsp32BT");
+  pinMode(2, OUTPUT);
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+
+  delay(1000);
+  if (BTSerial.available() > 0) {
+    String val = BTSerial.readStringUntil('\n');
+    if(val == "connection"){
+      running = true;
+      digitalWrite(2, HIGH);
+    } else if ( val != "connection") {
+      running = false;
+      digitalWrite(2, LOW);
+    }
+  }
+  BTSerial.println("Jing Connection");
+}
